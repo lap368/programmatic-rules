@@ -1,25 +1,19 @@
-# Main branch specific protection rule - should not be in other branches
-rules/main_branch_protection.json
-
 # Python cache files
 __pycache__/
+*.py[cod]
+*$py.class
+
+# Compiled Python files
 *.pyc
 *.pyo
-*.pyd
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST 
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db 

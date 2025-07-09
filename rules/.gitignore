@@ -1,0 +1,10 @@
+# Ignore everything in rules/ except the essential main branch files
+*
+
+# Allow the essential main branch rules
+!startup_entrypoint.json
+!shutdown_entrypoint.json
+!main_branch_protection.json
+
+# Also ignore any subdirectories and their contents
+*/ 
