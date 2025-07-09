@@ -5,5 +5,5 @@
   "requires": ["rules/main_branch_protection.json"],
   "relevant": [],
   "title": "Startup Entrypoint",
-  "content": "Main startup entrypoint rule. Ready for project-specific customization."
+  "content": "Main startup entrypoint rule. Ready for project-specific customization. [Updated in development]"
 } 
