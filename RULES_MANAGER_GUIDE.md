@@ -1,14 +1,15 @@
 # Rules Manager Guide
 
-The `rules_manager.py` script is a unified tool for managing programmatic rules in AI interactions. It replaces the separate `startup.py` and `shutdown.py` scripts with a single, more powerful interface.
+The `rules_manager.py` script is a unified tool for managing programmatic rules in AI interactions. It uses a YAML-based configuration system with dependency resolution and entrypoint patterns.
 
 ## Overview
 
 The Rules Manager provides a centralized way to:
-- Load and apply rules at interaction startup
-- Execute shutdown procedures
+- Load and apply rules at interaction startup with dependency resolution
+- Execute shutdown procedures with configurable rules
 - Browse and inspect available rules
 - View detailed rule information
+- Manage rule dependencies automatically
 
 ## Usage
 
@@ -20,7 +21,7 @@ python3 programmatic_rules/rules_manager.py <action> [options]
 
 ### 1. Startup (`startup`)
 
-**Purpose**: Load and apply rules specified in the startup configuration file.
+**Purpose**: Load and apply rules specified in the YAML configuration with dependency resolution.
 
 **Usage**: 
 ```bash
@@ -28,9 +29,9 @@ python3 programmatic_rules/rules_manager.py startup
 ```
 
 **What it does**:
-- Reads `programmatic_rules/startup_rules.txt` for rule file paths
-- Loads each specified rule from the `rules/` directory  
-- Displays active rules that will be applied to the AI model
+- Reads `programmatic_rules/rules.yaml` for startup configuration
+- Loads the startup entrypoint rule and resolves all dependencies
+- Displays active rules in dependency order (dependencies first)
 - Skips inactive rules with notification
 - Shows error messages for invalid or missing rule files
 
@@ -38,11 +39,11 @@ python3 programmatic_rules/rules_manager.py startup
 ```
 APPLYING STARTUP RULES:
 ==================================================
-RULE: PYTHON Capitalization Rule
-CONTENT: Whenever you write the word 'python' in any response, you MUST write it
- as 'PYTHON' in all capital letters. EXCEPTION: Do not capitalize when constructing 
- actual program calls (e.g., 'python3 script.py', 'python -m module'). This rule 
- applies to all other instances of the word.
+RULE: Hello World
+CONTENT: Put a hello world message in a markdown block in the chat.
+------------------------------
+RULE: Startup Entrypoint
+CONTENT: Main startup entrypoint rule. Ready for project-specific customization.
 ------------------------------
 ==================================================
 ```
@@ -57,16 +58,24 @@ python3 programmatic_rules/rules_manager.py shutdown
 ```
 
 **What it does**:
+- Reads `programmatic_rules/rules.yaml` for shutdown configuration
+- Loads the shutdown entrypoint rule and resolves all dependencies
 - Provides instructions for the AI model's end-of-turn behavior
-- Specifies what final output should be generated
-- Controls conversation termination procedures
+- Displays rules in dependency order
 
 **Example Output**:
 ```
+EXECUTING SHUTDOWN RULES:
+==================================================
 INSTRUCTIONS TO MODEL:
-All instructions that follow are REQUIRED to be executed. From this point on, no further text should be sent
- to the user except for any text that you are explicitly told to include from one of these rules.
-Please say Hello World to the user in a markdown block in the chat.
+RULE: Goodbye World
+CONTENT: This is a development rule that prints goodbye world at shutdown.
+------------------------------
+INSTRUCTIONS TO MODEL:
+RULE: Shutdown Entrypoint
+CONTENT: Main shutdown entrypoint rule. Ready for project-specific customization.
+------------------------------
+==================================================
 ```
 
 ### 3. List Rules (`list`)
@@ -81,19 +90,19 @@ python3 programmatic_rules/rules_manager.py list
 **What it does**:
 - Scans the `programmatic_rules/rules/` directory for `.json` files
 - Shows rule status (✓ for active, ✗ for inactive/error)
-- Displays rule title, category, and version
-- Lists dependencies if any exist
+- Displays rule title and dependency information
 - Reports errors for malformed rule files
 
 **Example Output**:
 ```
 AVAILABLE RULES:
 ==================================================
-✓ caps_python.json: PYTHON Capitalization Rule (Active)
-  Category: Language, Version: 1.0
-✗ example_inactive.json: Example Rule (Inactive)
-  Category: Test, Version: 1.0
-  Requires: dependency_rule
+✓ hello_world.json: Hello World (Active)
+  Dependencies: None
+✓ startup_entrypoint.json: Startup Entrypoint (Active)
+  Dependencies: rules/hello_world.json
+✗ inactive_rule.json: Inactive Rule (Inactive)
+  Dependencies: None
 ==================================================
 ```
 
@@ -111,35 +120,61 @@ python3 programmatic_rules/rules_manager.py show --rule <rule_name>
 
 **What it does**:
 - Loads the specified rule file
-- Shows complete metadata (title, category, version, status, dependencies)
+- Shows complete metadata (title, status, dependencies)
 - Displays the full rule content
 - Shows file path information
 
 **Example Usage**:
 ```bash
-python3 programmatic_rules/rules_manager.py show --rule caps_python
-python3 programmatic_rules/rules_manager.py show --rule caps_python.json
+python3 programmatic_rules/rules_manager.py show --rule hello_world
+python3 programmatic_rules/rules_manager.py show --rule startup_entrypoint.json
 ```
 
 **Example Output**:
 ```
 RULE DETAILS:
 ==================================================
-Title: PYTHON Capitalization Rule
-Category: Language
-Version: 1.0
+Title: Hello World
 Status: Active
-Requires: None
-Relevant: None
-File: programmatic_rules/rules/caps_python.json
+Dependencies: None
+File: programmatic_rules/rules/hello_world.json
 --------------------------------------------------
 Content:
-Whenever you write the word 'python' in any response, you MUST write it as 'PYTHON' 
-in all capital letters. EXCEPTION: Do not capitalize when constructing actual program 
-calls (e.g., 'python3 script.py', 'python -m module'). This rule applies to all 
-other instances of the word.
+Put a hello world message in a markdown block in the chat.
 ==================================================
 ```
+
+## Configuration System
+
+### YAML Configuration (`rules.yaml`)
+
+The system uses a unified YAML configuration file at `programmatic_rules/rules.yaml`:
+
+```yaml
+# Rules System Configuration
+startup:
+  # Primary entrypoint rule that manages startup sequence
+  entrypoint: rules/startup_entrypoint.json
+  
+shutdown:
+  # Primary entrypoint rule that manages shutdown sequence  
+  entrypoint: rules/shutdown_entrypoint.json
+
+# Configuration options
+options:
+  # Enable dependency resolution (recommended)
+  resolve_dependencies: true
+  
+  # Show dependency resolution details during execution
+  show_dependency_info: false
+```
+
+### Entrypoint Pattern
+
+The system uses an entrypoint pattern where:
+- **Startup**: Loads `startup_entrypoint.json` and all its dependencies
+- **Shutdown**: Loads `shutdown_entrypoint.json` and all its dependencies
+- **Dependencies**: Automatically resolved in correct order using `requires` field
 
 ## Rule File Structure
 
@@ -147,78 +182,90 @@ Rules are stored as JSON files in `programmatic_rules/rules/` with the following
 
 ```json
 {
-  "category": "Language",
-  "version": "1.0", 
-  "status": "Active",
-  "requires": [],
-  "relevant": [],
   "title": "Rule Title",
-  "content": "Rule description and instructions..."
+  "content": "Rule description and instructions...",
+  "active": true,
+  "requires": ["rules/dependency1.json", "rules/dependency2.json"]
 }
 ```
 
 ### Fields:
-- **category**: Logical grouping (e.g., "Language", "Behavior", "Format")
-- **version**: Semantic version number
-- **status**: "Active" or "Inactive" 
-- **requires**: Array of dependency rule file names
-- **relevant**: Array of conditionally relevant rule file names
 - **title**: Human-readable rule name
 - **content**: Detailed rule instructions for the AI model
+- **active**: Boolean indicating if rule should be executed
+- **requires**: Array of dependency rule file paths (relative to project root)
 
-## Configuration Files
+### Dependency Resolution
 
-### startup_rules.txt
-Located at `programmatic_rules/startup_rules.txt`, this file contains a comma-separated list of rule file paths to load at startup:
+The system automatically:
+- Resolves dependencies recursively
+- Loads dependencies before their dependents
+- Detects and prevents circular dependencies
+- Maintains execution order (dependencies first)
+
+**Example Dependency Chain**:
+```
+startup_entrypoint.json
+└── requires: ["rules/hello_world.json"]
+    └── requires: [] (no dependencies)
+```
+
+**Execution Order**: `hello_world.json` → `startup_entrypoint.json`
+
+## System Architecture
+
+### Class-Based Design
+
+The system uses a modular class-based architecture:
 
 ```
-rules/caps_python.json,rules/formatting_rule.json
+BaseCommand (abstract)
+├── RuleListCommand (abstract)
+│   ├── StartupCommand
+│   └── ShutdownCommand
+├── ListCommand
+└── ShowCommand
 ```
 
-Empty file = no rules loaded at startup.
+### Key Features
 
-## Error Handling
-
-The Rules Manager includes comprehensive error handling:
-- Missing files are reported with clear messages
-- Malformed JSON files show parsing errors
-- Invalid rule paths are logged and skipped
-- Missing required parameters trigger usage help
+- **Unified Configuration**: Single YAML file for all settings
+- **Dependency Resolution**: Automatic handling of rule dependencies
+- **Entrypoint Pattern**: Clean separation of concerns
+- **Error Handling**: Comprehensive error reporting
+- **Extensible**: Easy to add new commands and features
 
 ## Integration with AI Workflow
 
 ### Startup Integration
-Replace calls to `startup.py` with:
 ```bash
 python3 programmatic_rules/rules_manager.py startup
 ```
 
 ### Shutdown Integration  
-Replace calls to `shutdown.py` with:
 ```bash
 python3 programmatic_rules/rules_manager.py shutdown
 ```
 
-### Development Workflow
-Use `list` and `show` actions for rule development and debugging:
-```bash
-# See all available rules
-python3 programmatic_rules/rules_manager.py list
+### Development vs Production
 
-# Examine specific rule
-python3 programmatic_rules/rules_manager.py show --rule my_rule
+The system supports different configurations:
+- **Development**: May include debug rules and verbose output
+- **Production**: Clean, minimal rule sets for distribution
 
-# Test startup behavior  
-python3 programmatic_rules/rules_manager.py startup
-```
+## Error Handling
 
-## Future Enhancements
+The Rules Manager includes comprehensive error handling:
+- Missing YAML configuration files
+- Invalid rule file paths in dependencies
+- Malformed JSON rule files
+- Circular dependency detection
+- Missing required rule files
 
-Potential future actions for the Rules Manager:
-- `create`: Interactive rule creation wizard
-- `edit`: Modify existing rules 
-- `validate`: Check rule syntax and dependencies
-- `activate`/`deactivate`: Toggle rule status
-- `dependencies`: Show rule dependency graph
-- `export`: Package rules for sharing
-- `import`: Load rule sets from external sources 
+## Migration from Legacy Systems
+
+If migrating from older `.txt` or `.conf` based systems:
+1. Create `rules.yaml` with entrypoint configuration
+2. Update rule files to use simplified JSON structure
+3. Add dependency information to `requires` fields
+4. Test dependency resolution with `show_dependency_info: true` 

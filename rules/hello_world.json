@@ -1,6 +1,6 @@
 {
   "title": "Hello World",
-  "content": "This is a development rule that prints hello world at startup.",
+  "content": "Put a hello world message in a markdown block in the chat.",
   "active": true,
   "requires": []
 } 
