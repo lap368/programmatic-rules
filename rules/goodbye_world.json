@@ -1,0 +1,6 @@
+{
+  "title": "Goodbye World", 
+  "content": "Put a goodbye world message in a markdown block in the chat.",
+  "active": true,
+  "requires": []
+} 

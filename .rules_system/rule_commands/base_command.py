@@ -13,7 +13,10 @@ class BaseCommand(ABC):
     def __init__(self, args=None):
         """Initialize the command with optional arguments."""
         self.args = args
-        self.rules_base_path = "."
+        # Find the programmatic_rules directory relative to this file's location
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        self.rules_base_path = os.path.join(current_dir, "..", "..")
+        self.rules_base_path = os.path.normpath(self.rules_base_path)
         self.rules_dir = os.path.join(self.rules_base_path, "rules")
     
     def print_header(self, title: str, width: int = 50) -> None:
@@ -37,11 +40,22 @@ class BaseCommand(ABC):
         return True
     
     def get_rule_files(self) -> List[str]:
-        """Get list of all JSON rule files."""
+        """Get list of all JSON rule files, including those in subdirectories."""
         if not self.check_rules_directory():
             return []
         
-        return [f for f in os.listdir(self.rules_dir) if f.endswith('.json')]
+        rule_files = []
+        
+        # Walk through the rules directory recursively
+        for root, dirs, files in os.walk(self.rules_dir):
+            for file in files:
+                if file.endswith('.json'):
+                    # Get the relative path from the rules directory
+                    full_path = os.path.join(root, file)
+                    relative_path = os.path.relpath(full_path, self.rules_dir)
+                    rule_files.append(relative_path)
+        
+        return rule_files
     
     def load_rule(self, rule_path: str):
         """Load a rule using the Rule class."""

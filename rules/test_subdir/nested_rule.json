@@ -1,0 +1,9 @@
+{
+  "category": "Test",
+  "version": "1.0",
+  "status": "Active",
+  "requires": [],
+  "relevant": [],
+  "title": "Nested Test Rule",
+  "content": "This is a test rule in a subdirectory to test recursive loading."
+} 

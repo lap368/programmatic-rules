@@ -27,12 +27,26 @@ class ShowCommand(BaseCommand):
             sys.exit(1)
         
         rule_name = self.args.rule
-        rule_path = os.path.join(self.rules_dir, rule_name)
         if not rule_name.endswith('.json'):
-            rule_path += '.json'
+            rule_name += '.json'
         
-        if not os.path.exists(rule_path):
-            print(f"Rule file not found: {rule_path}")
+        # First, try to find the rule file in the rules directory (including subdirectories)
+        rule_path = None
+        all_rule_files = self.get_rule_files()
+        
+        # Look for exact match first
+        if rule_name in all_rule_files:
+            rule_path = os.path.join(self.rules_dir, rule_name)
+        else:
+            # Look for partial matches in case user provided a subdirectory path
+            for rule_file in all_rule_files:
+                if rule_file.endswith(rule_name) or rule_file == rule_name:
+                    rule_path = os.path.join(self.rules_dir, rule_file)
+                    break
+        
+        if not rule_path or not os.path.exists(rule_path):
+            print(f"Rule file not found: {rule_name}")
+            print(f"Available rules: {', '.join(all_rule_files)}")
             return
         
         try:
