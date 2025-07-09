@@ -1,0 +1,19 @@
+# Rules System Configuration - Main Branch
+# This is the clean, distributable version of the rules system.
+# Customize the entrypoint rules and their dependencies for your project.
+
+startup:
+  # Primary entrypoint rule that manages startup sequence
+  entrypoint: rules/startup_entrypoint.json
+
+shutdown:
+  # Primary entrypoint rule that manages shutdown sequence  
+  entrypoint: rules/shutdown_entrypoint.json
+
+# Configuration options
+options:
+  # Enable dependency resolution (recommended)
+  resolve_dependencies: true
+  
+  # Show dependency resolution details during execution
+  show_dependency_info: false 

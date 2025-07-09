@@ -1,0 +1,9 @@
+{
+  "category": "System",
+  "version": "1.0",
+  "status": "Active",
+  "requires": [],
+  "relevant": [],
+  "title": "Startup Entrypoint",
+  "content": "Main startup entrypoint rule. Ready for project-specific customization."
+} 

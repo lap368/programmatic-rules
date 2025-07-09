@@ -1,0 +1,9 @@
+{
+  "category": "System",
+  "version": "1.0",
+  "status": "Active", 
+  "requires": [],
+  "relevant": [],
+  "title": "Shutdown Entrypoint",
+  "content": "Main shutdown entrypoint rule. Ready for project-specific customization."
+} 
