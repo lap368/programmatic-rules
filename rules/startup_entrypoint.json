@@ -2,7 +2,7 @@
   "category": "System",
   "version": "1.0",
   "status": "Active",
-  "requires": [],
+  "requires": ["rules/hello_world.json"],
   "relevant": [],
   "title": "Startup Entrypoint",
   "content": "Main startup entrypoint rule. Ready for project-specific customization."

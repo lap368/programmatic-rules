@@ -1,0 +1,6 @@
+{
+  "title": "Goodbye World", 
+  "content": "This is a development rule that prints goodbye world at shutdown.",
+  "active": true,
+  "requires": []
+} 

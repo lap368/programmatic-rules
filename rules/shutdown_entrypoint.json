@@ -2,7 +2,7 @@
   "category": "System",
   "version": "1.0",
   "status": "Active", 
-  "requires": [],
+  "requires": ["rules/goodbye_world.json"],
   "relevant": [],
   "title": "Shutdown Entrypoint",
   "content": "Main shutdown entrypoint rule. Ready for project-specific customization."

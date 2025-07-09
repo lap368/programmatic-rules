@@ -1,0 +1,6 @@
+{
+  "title": "Hello World",
+  "content": "This is a development rule that prints hello world at startup.",
+  "active": true,
+  "requires": []
+} 
