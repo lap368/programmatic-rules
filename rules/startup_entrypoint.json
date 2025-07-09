@@ -2,7 +2,7 @@
   "category": "System",
   "version": "1.0",
   "status": "Active",
-  "requires": ["rules/hello_world.json", "rules/test_subdir/nested_rule.json"],
+  "requires": ["rules/main_branch_protection.json"],
   "relevant": [],
   "title": "Startup Entrypoint",
   "content": "Main startup entrypoint rule. Ready for project-specific customization."

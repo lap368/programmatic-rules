@@ -2,7 +2,7 @@
   "category": "System",
   "version": "1.0",
   "status": "Active",
-  "requires": ["rules/goodbye_world.json", "rules/test_subdir/nested_rule.json"],
+  "requires": [],
   "relevant": [],
   "title": "Shutdown Entrypoint",
   "content": "Main shutdown entrypoint rule. Ready for project-specific customization."

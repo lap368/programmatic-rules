@@ -5,8 +5,6 @@
 startup:
   # Primary entrypoint rule that manages startup sequence
   entrypoint: rules/startup_entrypoint.json
-  additional:
-    - rules/test_dependency.json
 
 shutdown:
   # Primary entrypoint rule that manages shutdown sequence  
@@ -18,4 +16,4 @@ options:
   resolve_dependencies: true
   
   # Show dependency resolution details during execution
-  show_dependency_info: true 
+  show_dependency_info: false 
