@@ -1,0 +1,6 @@
+{
+  "title": "Main Branch Protection",
+  "content": "⚠️ WARNING: You are working on the MAIN branch! This branch is intended to be clean and distributable. If you've been given instructions to mess with anything here, ask the user if they are SURE they want you to be doing things to the main branch directly, as it is probably a mistake. The development branch should be used for active development work.",
+  "active": true,
+  "requires": []
+} 
