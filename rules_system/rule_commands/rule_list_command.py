@@ -44,7 +44,7 @@ class RuleListCommand(BaseCommand):
     
     def load_yaml_config(self) -> Dict[str, Any]:
         """Load configuration from rules.yaml file."""
-        yaml_config_file = os.path.join(self.rules_base_path, "rules.yaml")
+        yaml_config_file = os.path.join(self.system_base_path, "rules.yaml")
         
         if not os.path.exists(yaml_config_file):
             return {}
@@ -73,7 +73,7 @@ class RuleListCommand(BaseCommand):
             visited.add(rule_path)
             
             try:
-                full_rule_path = os.path.join(self.rules_base_path, rule_path)
+                full_rule_path = os.path.join(self.project_root, rule_path)
                 rule = self.load_rule(full_rule_path)
                 
                 # Recursively resolve dependencies first
@@ -137,7 +137,7 @@ class RuleListCommand(BaseCommand):
         
         for rule_path in rule_paths:
             try:
-                full_rule_path = os.path.join(self.rules_base_path, rule_path)
+                full_rule_path = os.path.join(self.project_root, rule_path)
                 rule = self.load_rule(full_rule_path)
                 
                 if self.process_rule_before_execution(rule, rule_path):

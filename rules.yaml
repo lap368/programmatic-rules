@@ -4,11 +4,11 @@
 
 startup:
   # Primary entrypoint rule that manages startup sequence
-  entrypoint: rules/startup_entrypoint.json
+  entrypoint: rules/base_rules/startup_entrypoint.json
 
 shutdown:
   # Primary entrypoint rule that manages shutdown sequence  
-  entrypoint: rules/shutdown_entrypoint.json
+  entrypoint: rules/base_rules/shutdown_entrypoint.json
 
 # Configuration options
 options:

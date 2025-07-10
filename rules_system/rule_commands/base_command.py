@@ -13,11 +13,17 @@ class BaseCommand(ABC):
     def __init__(self, args=None):
         """Initialize the command with optional arguments."""
         self.args = args
-        # Find the programmatic_rules directory relative to this file's location
+        # Find paths relative to this file's location
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        self.rules_base_path = os.path.join(current_dir, "..", "..")
-        self.rules_base_path = os.path.normpath(self.rules_base_path)
-        self.rules_dir = os.path.join(self.rules_base_path, "rules")
+        
+        # Path to .programmatic directory (for system files like rules.yaml)
+        self.system_base_path = os.path.join(current_dir, "..", "..")
+        self.system_base_path = os.path.normpath(self.system_base_path)
+        
+        # Path to project root (for project's rules directory)
+        self.project_root = os.path.join(current_dir, "..", "..", "..")
+        self.project_root = os.path.normpath(self.project_root)
+        self.rules_dir = os.path.join(self.project_root, "rules")
     
     def print_header(self, title: str, width: int = 50) -> None:
         """Print a formatted header for command output."""

@@ -10,7 +10,7 @@ This script sets up the programmatic rules system in your project by:
 4. Setting up Cursor integration
 
 Usage:
-    python3 programmatic_rules/install.py
+    python3 programmatic-rules/install.py
 """
 
 import os
@@ -42,14 +42,14 @@ def print_info(message: str):
 
 def check_prerequisites():
     """Check if we're in the right location for installation."""
-    if not os.path.exists('programmatic_rules'):
-        print("❌ Error: programmatic_rules directory not found!")
+    if not os.path.exists('programmatic-rules'):
+        print("❌ Error: programmatic-rules directory not found!")
         print("   Make sure you're running this from the project root where you cloned the repo.")
         sys.exit(1)
     
-    if not os.path.exists('programmatic_rules/initial_rules'):
+    if not os.path.exists('programmatic-rules/initial_rules'):
         print("❌ Error: initial_rules directory not found!")
-        print("   This doesn't appear to be a valid programmatic_rules repository.")
+        print("   This doesn't appear to be a valid programmatic-rules repository.")
         sys.exit(1)
 
 def install_system():
@@ -67,7 +67,7 @@ def install_system():
         print_warning("Found existing .programmatic directory, removing it...")
         shutil.rmtree('.programmatic')
     
-    shutil.move('programmatic_rules', '.programmatic')
+    shutil.move('programmatic-rules', '.programmatic')
     print_success("System moved to .programmatic/")
     
     # Step 2: Create rules directory structure
