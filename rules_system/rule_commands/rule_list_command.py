@@ -73,7 +73,8 @@ class RuleListCommand(BaseCommand):
             visited.add(rule_path)
             
             try:
-                full_rule_path = os.path.join(self.project_root, rule_path)
+                # Use the rules directory (which now points to local or parent as appropriate)
+                full_rule_path = os.path.join(os.path.dirname(self.rules_dir), rule_path)
                 rule = self.load_rule(full_rule_path)
                 
                 # Recursively resolve dependencies first
@@ -137,7 +138,8 @@ class RuleListCommand(BaseCommand):
         
         for rule_path in rule_paths:
             try:
-                full_rule_path = os.path.join(self.project_root, rule_path)
+                # Use the rules directory (which now points to local or parent as appropriate)
+                full_rule_path = os.path.join(os.path.dirname(self.rules_dir), rule_path)
                 rule = self.load_rule(full_rule_path)
                 
                 if self.process_rule_before_execution(rule, rule_path):

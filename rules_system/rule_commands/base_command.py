@@ -20,10 +20,22 @@ class BaseCommand(ABC):
         self.system_base_path = os.path.join(current_dir, "..", "..")
         self.system_base_path = os.path.normpath(self.system_base_path)
         
-        # Path to project root (for project's rules directory)
+        # Path to local rules directory (prioritized)
+        self.local_rules_dir = os.path.join(current_dir, "..", "..", "rules")
+        self.local_rules_dir = os.path.normpath(self.local_rules_dir)
+        
+        # Path to project root (for fallback rules directory)
         self.project_root = os.path.join(current_dir, "..", "..", "..")
         self.project_root = os.path.normpath(self.project_root)
-        self.rules_dir = os.path.join(self.project_root, "rules")
+        self.fallback_rules_dir = os.path.join(self.project_root, "rules")
+        
+        # Set primary rules directory (local first, fallback to parent)
+        if os.path.exists(self.local_rules_dir):
+            self.rules_dir = self.local_rules_dir
+            self.rules_source = "local"
+        else:
+            self.rules_dir = self.fallback_rules_dir
+            self.rules_source = "parent"
     
     def print_header(self, title: str, width: int = 50) -> None:
         """Print a formatted header for command output."""
@@ -41,7 +53,7 @@ class BaseCommand(ABC):
     def check_rules_directory(self) -> bool:
         """Check if the rules directory exists."""
         if not os.path.exists(self.rules_dir):
-            print("Rules directory not found.")
+            print(f"Rules directory not found at {self.rules_dir}.")
             return False
         return True
     
