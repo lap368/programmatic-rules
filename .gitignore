@@ -18,6 +18,5 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# User rules directory - allow base entrypoint but exclude customizations
-rules/user/*
-!rules/user/entrypoint.json 
+# User rules directory - exclude all user customizations including entrypoint modifications
+rules/user/* 
