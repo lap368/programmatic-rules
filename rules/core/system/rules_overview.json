@@ -1,0 +1,8 @@
+{
+  "title": "Rules System Overview", 
+  "version": "1.0",
+  "status": "active",
+  "content": "Rules are JSON files that define AI behavior. Use `python3 rules_manager.py run [rule_set]` to load rule sets.",
+  "description": "Core rule explaining the fundamental concept of the rules system and basic usage.",
+  "requires": []
+} 

@@ -1,0 +1,12 @@
+{
+  "title": "Core System Rules Entrypoint",
+  "version": "1.0",
+  "status": "active",
+  "content": "📚 CORE SYSTEM: Loading universal rules about how to use the rules system.",
+  "description": "Entrypoint that loads all core system rules explaining how to use and extend the rules system.",
+  "requires": [
+    "core/system/rules_overview.json",
+    "core/system/creating_rules.json", 
+    "core/system/dependencies.json"
+  ]
+} 

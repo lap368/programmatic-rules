@@ -1,0 +1,11 @@
+{
+  "title": "Startup Entrypoint",
+  "version": "1.0",
+  "status": "active",
+  "content": "🚀 LAYERED STARTUP: Loading core system rules and user customizations. Ready for development and rule management.",
+  "description": "Primary entrypoint that loads both core system rules and user-specific rules to provide a complete development environment.",
+  "requires": [
+    "core/system/entrypoint.json",
+    "user/entrypoint.json"
+  ]
+} 

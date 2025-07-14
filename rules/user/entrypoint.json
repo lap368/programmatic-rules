@@ -1,0 +1,8 @@
+{
+  "title": "User Rules Entrypoint",
+  "version": "1.0",
+  "status": "active",
+  "content": "💡 Add your custom rules in the user/ directory to customize behavior for your specific needs.",
+  "description": "Placeholder entrypoint for user-specific rules. Users can create additional rules in user/project/ or user/custom/ and reference them from other entrypoints.",
+  "requires": []
+} 

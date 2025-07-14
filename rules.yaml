@@ -6,11 +6,11 @@
 rule_sets:
   startup:
     # Primary entrypoint rule that manages startup sequence
-    entrypoint: base_rules/startup_entrypoint.json
+    entrypoint: core/base_rules/startup_entrypoint.json
     
   shutdown:
     # Primary entrypoint rule that manages shutdown sequence  
-    entrypoint: base_rules/shutdown_entrypoint.json
+    entrypoint: core/base_rules/shutdown_entrypoint.json
 
 # Configuration options
 options:

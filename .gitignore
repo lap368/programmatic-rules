@@ -16,4 +16,8 @@ __pycache__/
 
 # OS files
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# User rules directory - allow base entrypoint but exclude customizations
+rules/user/*
+!rules/user/entrypoint.json 

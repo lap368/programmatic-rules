@@ -1,0 +1,8 @@
+{
+  "title": "Rule Dependencies",
+  "version": "1.0",
+  "status": "active", 
+  "content": "Use 'requires' field to specify rule dependencies. Paths are relative to rules directory (e.g., 'core/system/auth.json').",
+  "description": "Universal rule explaining how to use the requires field to create rule dependencies and reference rules across directories.",
+  "requires": []
+} 

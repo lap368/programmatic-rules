@@ -1,0 +1,8 @@
+{
+  "title": "Creating Custom Rules",
+  "version": "1.0", 
+  "status": "active",
+  "content": "Create new rules in user/project/ or user/custom/ directories. Use JSON format with title, content, and optional requires field.",
+  "description": "Universal rule explaining how users can create their own custom rules in the user directory.",
+  "requires": []
+} 
