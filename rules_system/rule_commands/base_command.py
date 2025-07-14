@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import yaml
 from abc import ABC, abstractmethod
 from typing import List, Optional
 
@@ -20,22 +21,52 @@ class BaseCommand(ABC):
         self.system_base_path = os.path.join(current_dir, "..", "..")
         self.system_base_path = os.path.normpath(self.system_base_path)
         
-        # Path to local rules directory (prioritized)
-        self.local_rules_dir = os.path.join(current_dir, "..", "..", "rules")
-        self.local_rules_dir = os.path.normpath(self.local_rules_dir)
-        
-        # Path to project root (for fallback rules directory)
+        # Default project root path
         self.project_root = os.path.join(current_dir, "..", "..", "..")
         self.project_root = os.path.normpath(self.project_root)
-        self.fallback_rules_dir = os.path.join(self.project_root, "rules")
         
-        # Set primary rules directory (local first, fallback to parent)
-        if os.path.exists(self.local_rules_dir):
-            self.rules_dir = self.local_rules_dir
-            self.rules_source = "local"
+        # Configure rules directory with flexibility
+        self.rules_dir = self._configure_rules_directory()
+    
+    def _configure_rules_directory(self) -> str:
+        """Configure the rules directory path using environment variables, config, or defaults."""
+        
+        # 1. Check environment variable first
+        env_rules_dir = os.environ.get('PROGRAMMATIC_RULES_DIR')
+        if env_rules_dir:
+            if os.path.isabs(env_rules_dir):
+                return env_rules_dir
+            else:
+                return os.path.normpath(os.path.join(self.project_root, env_rules_dir))
+        
+        # 2. Check configuration file
+        config_rules_dir = self._get_rules_dir_from_config()
+        if config_rules_dir:
+            if os.path.isabs(config_rules_dir):
+                return config_rules_dir
+            else:
+                return os.path.normpath(os.path.join(self.project_root, config_rules_dir))
+        
+        # 3. Default fallback - try local first, then parent
+        local_rules_dir = os.path.join(self.system_base_path, "rules")
+        if os.path.exists(local_rules_dir):
+            return local_rules_dir
         else:
-            self.rules_dir = self.fallback_rules_dir
-            self.rules_source = "parent"
+            return os.path.join(self.project_root, "rules")
+    
+    def _get_rules_dir_from_config(self) -> Optional[str]:
+        """Get rules directory from configuration file."""
+        try:
+            config_file = os.path.join(self.system_base_path, "rules.yaml")
+            if not os.path.exists(config_file):
+                return None
+                
+            with open(config_file, 'r') as f:
+                config = yaml.safe_load(f) or {}
+            
+            return config.get('options', {}).get('rules_directory')
+        except Exception:
+            return None
     
     def print_header(self, title: str, width: int = 50) -> None:
         """Print a formatted header for command output."""
@@ -54,6 +85,9 @@ class BaseCommand(ABC):
         """Check if the rules directory exists."""
         if not os.path.exists(self.rules_dir):
             print(f"Rules directory not found at {self.rules_dir}.")
+            print("You can configure it using:")
+            print("1. Environment variable: PROGRAMMATIC_RULES_DIR")
+            print("2. Configuration: rules_directory in rules.yaml options section")
             return False
         return True
     
