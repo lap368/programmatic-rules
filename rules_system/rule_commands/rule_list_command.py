@@ -60,6 +60,7 @@ class RuleListCommand(BaseCommand):
         """
         Resolve rule dependencies recursively to build execution order.
         Returns a list of rule paths in dependency order (dependencies first).
+        Dependencies are resolved relative to the configured rules_directory.
         """
         if visited is None:
             visited = set()
@@ -73,8 +74,8 @@ class RuleListCommand(BaseCommand):
             visited.add(rule_path)
             
             try:
-                # Use the rules directory (which now points to local or parent as appropriate)
-                full_rule_path = os.path.join(os.path.dirname(self.rules_dir), rule_path)
+                # Make dependency paths relative to the configured rules_directory
+                full_rule_path = os.path.join(self.rules_dir, rule_path)
                 rule = self.load_rule(full_rule_path)
                 
                 # Recursively resolve dependencies first
@@ -138,8 +139,8 @@ class RuleListCommand(BaseCommand):
         
         for rule_path in rule_paths:
             try:
-                # Use the rules directory (which now points to local or parent as appropriate)
-                full_rule_path = os.path.join(os.path.dirname(self.rules_dir), rule_path)
+                # Make rule paths relative to the configured rules_directory
+                full_rule_path = os.path.join(self.rules_dir, rule_path)
                 rule = self.load_rule(full_rule_path)
                 
                 if self.process_rule_before_execution(rule, rule_path):
