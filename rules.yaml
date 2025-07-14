@@ -11,10 +11,6 @@ rule_sets:
   shutdown:
     # Primary entrypoint rule that manages shutdown sequence  
     entrypoint: rules/base_rules/shutdown_entrypoint.json
-    
-  example:
-    # Example custom rule set - demonstrates extensibility
-    entrypoint: rules/base_rules/shutdown_entrypoint.json
 
 # Configuration options
 options:
