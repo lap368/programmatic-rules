@@ -1,14 +1,20 @@
-# Rules System Configuration - Main Branch
-# This is the clean, distributable version of the rules system.
-# Customize the entrypoint rules and their dependencies for your project.
+# Rules System Configuration - Flexible Rule Sets
+# This configuration supports multiple named rule sets that can be executed with:
+# rules_manager.py run [rule_set_name]
 
-startup:
-  # Primary entrypoint rule that manages startup sequence
-  entrypoint: rules/base_rules/startup_entrypoint.json
-
-shutdown:
-  # Primary entrypoint rule that manages shutdown sequence  
-  entrypoint: rules/base_rules/shutdown_entrypoint.json
+# Named rule sets - add as many as needed
+rule_sets:
+  startup:
+    # Primary entrypoint rule that manages startup sequence
+    entrypoint: rules/base_rules/startup_entrypoint.json
+    
+  shutdown:
+    # Primary entrypoint rule that manages shutdown sequence  
+    entrypoint: rules/base_rules/shutdown_entrypoint.json
+    
+  example:
+    # Example custom rule set - demonstrates extensibility
+    entrypoint: rules/base_rules/shutdown_entrypoint.json
 
 # Configuration options
 options:

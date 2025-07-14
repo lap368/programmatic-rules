@@ -7,15 +7,13 @@ Contains all available command implementations.
 
 from .base_command import BaseCommand
 from .rule_list_command import RuleListCommand
-from .startup_command import StartupCommand
-from .shutdown_command import ShutdownCommand
+from .run_command import RunCommand
 from .list_command import ListCommand
 from .show_command import ShowCommand
 
 # Registry of all available commands
 AVAILABLE_COMMANDS = {
-    StartupCommand.get_command_name(): StartupCommand,
-    ShutdownCommand.get_command_name(): ShutdownCommand,
+    RunCommand.get_command_name(): RunCommand,
     ListCommand.get_command_name(): ListCommand,
     ShowCommand.get_command_name(): ShowCommand,
 }
@@ -31,8 +29,7 @@ def get_all_commands():
 __all__ = [
     'BaseCommand',
     'RuleListCommand',
-    'StartupCommand', 
-    'ShutdownCommand',
+    'RunCommand',
     'ListCommand',
     'ShowCommand',
     'AVAILABLE_COMMANDS',
